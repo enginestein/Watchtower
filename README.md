@@ -1,6 +1,6 @@
 # Watchtower
 
-A self-hosted CCTV system using an ESP32-CAM for video capture and a Node.js server for motion detection, human recognition, recording, and live monitoring via a dark-mode web dashboard.
+A self-hosted CCTV system using an ESP32-CAM for video capture and a Node.js server for motion detection, human recognition, recording, and live monitoring via a web dashboard.
 
 ## Architecture
 
@@ -16,30 +16,6 @@ ESP32-CAM ──MJPEG/HTTP──> Node.js Server ──WebSocket──> Browser 
 - **Node.js server** polls frames, detects motion (frame diffing via Sharp), detects humans (COCO-SSD), records segments, stores events in SQLite.
 - **Browser dashboard** single-page app (HTML/CSS/JS) with live view, event browsing, alerts, camera settings, system logs.
 
-## Project Structure
-
-```
-cctv/
-├── server.js                        # Express + Socket.IO server
-├── config.json                      # System & camera configuration
-├── src/
-│   ├── camera-manager.js            # Camera lifecycle, frame polling, settings
-│   ├── motion-detector.js           # Frame-diffing motion detection
-│   ├── human-detector.js            # TensorFlow.js COCO-SSD detection
-│   ├── recorder.js                  # Frame capture, session management, cleanup
-│   ├── database.js                  # SQLite schema & queries
-│   ├── logger.js                    # File + DB + console logging
-│   └── alert-manager.js             # Deduplicated alerts, WS push
-├── public/
-│   ├── index.html                   # SPA dashboard
-│   └── css/style.css                # Dark theme
-├── esp32-sketch/
-│   └── ESP32_CAM_Streamer/
-│       └── ESP32_CAM_Streamer.ino   # ESP32-CAM firmware
-├── recordings/                      # Recording output (created at runtime)
-├── snapshots/                       # Motion/human detection snapshots
-└── logs/                            # Rotating log files
-```
 
 ## Hardware Requirements
 
@@ -181,10 +157,3 @@ The ESP32-CAM exposes these endpoints on its HTTP server:
 | `/flash` | `en` (0/1) | Flash LED on/off |
 | `/brightness` | `val` (-2–2) | Set brightness |
 | `/contrast` | `val` (-2–2) | Set contrast |
-
-## Notes
-
-- The ESP32 sketch uses a raw `WiFiServer` (not Arduino `WebServer`) so that settings commands are processed even while a browser is streaming MJPEG. The Arduino `WebServer` is single-client and blocks settings requests during a stream.
-- TensorFlow.js model loading is deferred — the server starts immediately and enables human detection once the model is ready.
-- Motion detection uses grayscale frame differencing via Sharp, with configurable threshold and cooldown.
-- Frame buffers are kept per-camera (50 frames) for recording and analysis.
