@@ -1,0 +1,8 @@
+node_modules/
+data/
+recordings/
+snapshots/
+logs/
+*.db
+*.db-wal
+*.db-shm

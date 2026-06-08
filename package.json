@@ -1,0 +1,20 @@
+{
+  "name": "watchtower",
+  "version": "1.0.0",
+  "description": "ESP32-CAM Watchtower - self-hosted CCTV with motion detection, human detection, and dark mode dashboard",
+  "author": "Enginestein",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "@tensorflow-models/coco-ssd": "^2.2.3",
+    "@tensorflow/tfjs-node": "^4.22.0",
+    "better-sqlite3": "^11.7.0",
+    "chokidar": "^4.0.3",
+    "express": "^4.21.1",
+    "sharp": "^0.33.5",
+    "socket.io": "^4.8.1"
+  }
+}

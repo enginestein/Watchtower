@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watchtower</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<div class="app-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <h1>Watchtower</h1>
+      <span class="version">v1.0</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">Main</div>
+        <button class="nav-item active" data-page="dashboard">
+          <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></span> Dashboard
+        </button>
+        <button class="nav-item" data-page="live">
+          <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></span> Live View
+        </button>
+        <button class="nav-item" data-page="recordings">
+          <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg></span> Recordings
+        </button>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Events</div>
+        <button class="nav-item" data-page="motion">
+          <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span> Motion Events
+        </button>
+        <button class="nav-item" data-page="humans">
+          <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> Human Detection
+          <span class="badge" id="human-badge" style="display:none">0</span>
+        </button>
+        <button class="nav-item" data-page="alerts">
+          <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span> Alerts
+          <span class="badge" id="alert-badge" style="display:none">0</span>
+        </button>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">System</div>
+        <button class="nav-item" data-page="logs">
+          <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span> Logs
+        </button>
+        <button class="nav-item" data-page="cameras">
+          <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></span> Cameras
+        </button>
+        <button class="nav-item" data-page="settings">
+          <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span> Settings
+        </button>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="server-status">
+        <span class="dot" id="status-dot"></span>
+        <span id="status-text">Connected</span>
+        <span style="margin-left:auto;font-size:11px" id="status-uptime"></span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- Header -->
+    <header class="main-header">
+      <button class="sidebar-toggle" id="sidebar-toggle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      <span class="page-title" id="page-title">Dashboard</span>
+      <div class="header-actions">
+        <span class="header-time" id="header-time"></span>
+      </div>
+    </header>
+
+    <!-- Alert Toast Container -->
+    <div class="alert-toast" id="alert-toast"></div>
+
+    <!-- Content Area -->
+    <div class="content-area">
+
+      <!-- ==================== DASHBOARD PAGE ==================== -->
+      <section class="page active" id="page-dashboard">
+        <div class="stats-grid" id="dashboard-stats"></div>
+
+        <div class="section-title">Camera Overview</div>
+        <div class="camera-grid" id="dashboard-cameras"></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="table-container">
+            <div class="table-header"><h3>Recent Alerts</h3></div>
+            <div class="table-scroll"><table id="dashboard-alerts-table"><tbody></tbody></table></div>
+          </div>
+          <div class="table-container">
+            <div class="table-header"><h3>Recent Motion Events</h3></div>
+            <div class="table-scroll"><table id="dashboard-motion-table"><tbody></tbody></table></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== LIVE VIEW PAGE ==================== -->
+      <section class="page" id="page-live">
+        <div class="section-title">Live Camera Feeds</div>
+        <div class="camera-grid" id="live-cameras"></div>
+      </section>
+
+      <!-- ==================== RECORDINGS PAGE ==================== -->
+      <section class="page" id="page-recordings">
+        <div class="toolbar">
+          <input class="search-input" placeholder="Search recordings..." id="recording-search">
+          <select class="form-input" style="width:auto" id="recording-camera-filter">
+            <option value="">All Cameras</option>
+          </select>
+          <button class="btn btn-secondary" onclick="loadRecordings()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Refresh</button>
+        </div>
+        <div class="table-container">
+          <div class="table-header"><h3>Recordings</h3></div>
+          <div class="table-scroll" style="max-height:500px">
+            <table>
+              <thead><tr><th>Camera</th><th>Type</th><th>Start Time</th><th>Duration</th><th>Size</th><th>Actions</th></tr></thead>
+              <tbody id="recordings-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== MOTION EVENTS PAGE ==================== -->
+      <section class="page" id="page-motion">
+        <div class="toolbar">
+          <select class="form-input" style="width:auto" id="motion-camera-filter">
+            <option value="">All Cameras</option>
+          </select>
+          <button class="btn btn-secondary" onclick="loadMotionEvents()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Refresh</button>
+        </div>
+        <div class="table-container">
+          <div class="table-header"><h3>Motion Events</h3></div>
+          <div class="table-scroll" style="max-height:500px">
+            <table>
+              <thead><tr><th>Camera</th><th>Time</th><th>Motion Score</th><th>Snapshot</th></tr></thead>
+              <tbody id="motion-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== HUMAN DETECTION PAGE ==================== -->
+      <section class="page" id="page-humans">
+        <div class="toolbar">
+          <select class="form-input" style="width:auto" id="human-camera-filter">
+            <option value="">All Cameras</option>
+          </select>
+          <button class="btn btn-secondary" onclick="loadHumanDetections()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Refresh</button>
+        </div>
+        <div class="table-container">
+          <div class="table-header"><h3>Human Detections</h3></div>
+          <div class="table-scroll" style="max-height:500px">
+            <table>
+              <thead><tr><th>Camera</th><th>Time</th><th>Confidence</th><th>Snapshot</th></tr></thead>
+              <tbody id="human-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== ALERTS PAGE ==================== -->
+      <section class="page" id="page-alerts">
+        <div class="toolbar">
+          <select class="form-input" style="width:auto" id="alert-filter">
+            <option value="">All Alerts</option>
+            <option value="unacknowledged">Unacknowledged</option>
+            <option value="acknowledged">Acknowledged</option>
+          </select>
+          <button class="btn btn-secondary" onclick="loadAlerts()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Refresh</button>
+          <button class="btn btn-success" onclick="acknowledgeAllAlerts()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Acknowledge All</button>
+        </div>
+        <div class="table-container">
+          <div class="table-header"><h3>Alert History</h3></div>
+          <div class="table-scroll" style="max-height:550px">
+            <table>
+              <thead><tr><th>Type</th><th>Camera</th><th>Message</th><th>Time</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody id="alerts-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== LOGS PAGE ==================== -->
+      <section class="page" id="page-logs">
+        <div class="toolbar">
+          <select class="form-input" style="width:auto" id="log-level-filter">
+            <option value="">All Levels</option>
+            <option value="ERROR">ERROR</option>
+            <option value="WARN">WARN</option>
+            <option value="INFO">INFO</option>
+            <option value="DEBUG">DEBUG</option>
+          </select>
+          <button class="btn btn-secondary" onclick="loadLogs()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Refresh</button>
+          <button class="btn btn-danger" onclick="clearLogs()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Clear</button>
+        </div>
+        <div class="table-container">
+          <div class="table-header"><h3>System Logs</h3></div>
+          <div class="log-entries" id="log-entries"></div>
+        </div>
+      </section>
+
+      <!-- ==================== CAMERAS PAGE ==================== -->
+      <section class="page" id="page-cameras">
+        <div class="toolbar">
+          <button class="btn btn-primary" onclick="showAddCameraModal()">+ Add Camera</button>
+          <button class="btn btn-secondary" onclick="loadCamerasPage()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Refresh</button>
+        </div>
+        <div class="table-container">
+          <div class="table-header"><h3>Camera Configuration</h3></div>
+          <div class="table-scroll" style="max-height:500px">
+            <table>
+              <thead><tr><th>ID</th><th>Name</th><th>Stream URL</th><th>Location</th><th>Status</th><th>Frames</th><th>Actions</th></tr></thead>
+              <tbody id="cameras-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SETTINGS PAGE ==================== -->
+      <section class="page" id="page-settings">
+        <div class="section-title">System Settings</div>
+
+        <div class="table-container">
+          <div class="table-header"><h3>Motion Detection</h3></div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Enable Motion Detection</label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="motion-enabled" onchange="toggleMotion()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="form-group">
+              <label>Sensitivity (5-100): <span id="sensitivity-value">25</span></label>
+              <input type="range" min="5" max="100" value="25" class="form-input" id="motion-sensitivity" oninput="updateMotionSettings()">
+            </div>
+            <div class="form-group">
+              <label>Threshold (0.5-50): <span id="threshold-value">5</span></label>
+              <input type="range" min="0.5" max="50" step="0.5" value="5" class="form-input" id="motion-threshold" oninput="updateMotionSettings()">
+            </div>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <div class="table-header"><h3>Human Detection</h3></div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Enable Human Detection</label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="human-enabled" onchange="toggleHumanDetection()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="form-group">
+              <label>Confidence Threshold (0.1-0.99): <span id="confidence-value">0.50</span></label>
+              <input type="range" min="0.1" max="0.99" step="0.01" value="0.5" class="form-input" id="human-confidence" oninput="updateHumanSettings()">
+            </div>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <div class="table-header"><h3>Recording</h3></div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Enable Recording</label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="recording-enabled" checked onchange="toggleRecording()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="form-group">
+              <label>Retention Period (days)</label>
+              <input type="number" class="form-input" id="retention-days" value="14" min="1" max="365" style="width:100px">
+            </div>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <div class="table-header"><h3>Alerts</h3></div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Enable Alerts</label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="alerts-enabled" checked onchange="toggleAlerts()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="form-checkbox" style="margin-bottom:8px">
+              <input type="checkbox" id="motion-alert" checked>
+              <label for="motion-alert">Motion Alerts</label>
+            </div>
+            <div class="form-checkbox" style="margin-bottom:8px">
+              <input type="checkbox" id="human-alert" checked>
+              <label for="human-alert">Human Detection Alerts</label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- Camera Settings Modal -->
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header">
+      <h2>Camera Settings: <span id="settings-cam-name"></span></h2>
+      <button class="btn btn-ghost" onclick="closeModal('settings-modal')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div id="settings-loading" style="text-align:center;padding:20px;color:var(--text-muted)">Loading current settings...</div>
+      <div id="settings-content" style="display:none">
+
+        <div class="form-group">
+          <label>Resolution</label>
+          <select class="form-input" id="set-resolution">
+            <option value="qvga">QVGA (320x240)</option>
+            <option value="vga" selected>VGA (640x480)</option>
+            <option value="svga">SVGA (800x600)</option>
+            <option value="hd">HD (1280x720)</option>
+            <option value="sxga">SXGA (1280x1024)</option>
+            <option value="uxga">UXGA (1600x1200)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>JPEG Quality: <span id="set-quality-label">12</span> (4 = best, 63 = worst)</label>
+          <input type="range" min="4" max="63" value="12" class="form-input" id="set-quality" oninput="$('#set-quality-label').textContent=this.value">
+        </div>
+
+        <div class="form-group" style="display:flex;gap:24px;flex-wrap:wrap">
+          <label class="form-checkbox">
+            <input type="checkbox" id="set-hmirror">
+            <span>Horizontal Mirror</span>
+          </label>
+          <label class="form-checkbox">
+            <input type="checkbox" id="set-vflip">
+            <span>Vertical Flip</span>
+          </label>
+        </div>
+
+        <div class="form-group" style="display:flex;gap:24px;flex-wrap:wrap">
+          <label class="form-checkbox" id="flash-container">
+            <input type="checkbox" id="set-flash">
+            <span>Enable Flash LED <span style="color:var(--text-muted);font-size:11px">(GPIO 4)</span></span>
+          </label>
+        </div>
+
+        <div id="flash-warning" style="display:none;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:6px;padding:10px 14px;margin-bottom:16px">
+          <div style="display:flex;gap:8px;align-items:flex-start">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <div>
+              <strong style="color:#f59e0b;font-size:13px">Warning:</strong>
+              <p style="color:var(--text-secondary);font-size:12px;margin-top:4px">
+                The flash LED draws significant current from the ESP32-CAM regulator, which can cause voltage drops,
+                resets, or reduced WiFi range. The flash will auto-disable after 30 seconds for safety.
+                If the camera becomes unstable with flash on, leave it disabled.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Brightness: <span id="set-brightness-label">0</span></label>
+          <input type="range" min="-2" max="2" step="1" value="0" class="form-input" id="set-brightness" oninput="$('#set-brightness-label').textContent=this.value">
+        </div>
+
+        <div class="form-group">
+          <label>Contrast: <span id="set-contrast-label">0</span></label>
+          <input type="range" min="-2" max="2" step="1" value="0" class="form-input" id="set-contrast" oninput="$('#set-contrast-label').textContent=this.value">
+        </div>
+
+        <div id="settings-result" style="display:none;padding:8px 12px;border-radius:6px;margin-top:8px"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('settings-modal')">Cancel</button>
+      <button class="btn btn-primary" id="settings-apply-btn" onclick="applyCameraSettings()">Apply Settings</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Camera Modal -->
+<div class="modal-overlay" id="add-camera-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Add Camera</h2>
+      <button class="btn btn-ghost" onclick="closeModal('add-camera-modal')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Camera Name</label>
+        <input class="form-input" id="cam-name" placeholder="Front Door">
+      </div>
+      <div class="form-group">
+        <label>Stream URL</label>
+        <input class="form-input" id="cam-stream-url" placeholder="http://192.168.1.100:81/stream">
+      </div>
+      <div class="form-group">
+        <label>Snapshot URL</label>
+        <input class="form-input" id="cam-snapshot-url" placeholder="http://192.168.1.100:81/capture">
+      </div>
+      <div class="form-group">
+        <label>Location</label>
+        <input class="form-input" id="cam-location" placeholder="Front Entrance">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('add-camera-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addCamera()">Add Camera</button>
+    </div>
+  </div>
+</div>
+
+<!-- Image Preview Overlay -->
+<div class="image-preview-overlay" id="image-preview" onclick="closeImagePreview()">
+  <img id="preview-image" src="" alt="Preview">
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+// ============================================================
+// Socket.IO Connection
+// ============================================================
+const socket = io({
+  transports: ['websocket', 'polling']
+});
+
+// ============================================================
+// Utility Functions
+// ============================================================
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
+
+function formatBytes(bytes) {
+  if (!bytes || bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+}
+
+function formatDuration(seconds) {
+  if (!seconds) return '0s';
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+  if (h > 0) return `${h}h ${m}m`;
+  if (m > 0) return `${m}m ${s}s`;
+  return `${s}s`;
+}
+
+function formatTime(isoStr) {
+  if (!isoStr) return '-';
+  const d = new Date(isoStr);
+  return d.toLocaleString(undefined, {
+    month: 'short', day: 'numeric',
+    hour: '2-digit', minute: '2-digit', second: '2-digit'
+  });
+}
+
+function formatTimeShort(isoStr) {
+  if (!isoStr) return '-';
+  const d = new Date(isoStr);
+  return d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+
+function timeAgo(isoStr) {
+  if (!isoStr) return '-';
+  const diff = Date.now() - new Date(isoStr).getTime();
+  const sec = Math.floor(diff / 1000);
+  if (sec < 5) return 'just now';
+  if (sec < 60) return `${sec}s ago`;
+  const min = Math.floor(sec / 60);
+  if (min < 60) return `${min}m ago`;
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return `${hr}h ago`;
+  const d = Math.floor(hr / 24);
+  return `${d}d ago`;
+}
+
+function escapeHtml(text) {
+  if (!text) return '';
+  const d = document.createElement('div');
+  d.textContent = text;
+  return d.innerHTML;
+}
+
+function getCameraName(id) {
+  const cam = window.cameraList?.find(c => c.id === id);
+  return cam ? cam.name : `Camera ${id}`;
+}
+
+function snapshotUrl(path) {
+  if (!path) return null;
+  return '/' + path.replace(/\\/g, '/');
+}
+
+// ============================================================
+// Navigation
+// ============================================================
+const pageTitles = {
+  dashboard: 'Dashboard',
+  live: 'Live View',
+  recordings: 'Recordings',
+  motion: 'Motion Events',
+  humans: 'Human Detection',
+  alerts: 'Alerts',
+  logs: 'System Logs',
+  cameras: 'Camera Management',
+  settings: 'Settings'
+};
+
+$$('.nav-item[data-page]').forEach(item => {
+  item.addEventListener('click', () => {
+    const page = item.dataset.page;
+    navigateTo(page);
+  });
+});
+
+function navigateTo(page) {
+  $$('.nav-item').forEach(n => n.classList.remove('active'));
+  $$('.page').forEach(p => p.classList.remove('active'));
+
+  const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
+  if (navItem) navItem.classList.add('active');
+
+  const pageEl = document.getElementById(`page-${page}`);
+  if (pageEl) pageEl.classList.add('active');
+
+  $('#page-title').textContent = pageTitles[page] || page;
+
+  // Load page data
+  switch(page) {
+    case 'dashboard': loadDashboard(); break;
+    case 'live': loadLiveView(); break;
+    case 'recordings': loadRecordings(); break;
+    case 'motion': loadMotionEvents(); break;
+    case 'humans': loadHumanDetections(); break;
+    case 'alerts': loadAlerts(); break;
+    case 'logs': loadLogs(); break;
+    case 'cameras': loadCamerasPage(); break;
+  }
+
+  // Close mobile sidebar
+  $('#sidebar').classList.remove('open');
+}
+
+// ============================================================
+// Clock
+// ============================================================
+function updateClock() {
+  $('#header-time').textContent = new Date().toLocaleString(undefined, {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  });
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// Sidebar toggle
+$('#sidebar-toggle').addEventListener('click', () => {
+  $('#sidebar').classList.toggle('open');
+});
+
+// ============================================================
+// API Helpers
+// ============================================================
+async function api(path, options = {}) {
+  const res = await fetch(path, {
+    headers: { 'Content-Type': 'application/json', ...options.headers },
+    ...options
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: res.statusText }));
+    throw new Error(err.error || res.statusText);
+  }
+  return res.json();
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+async function loadDashboard() {
+  try {
+    const stats = await api('/api/stats');
+    renderDashboardStats(stats);
+    loadDashboardCameras(stats);
+    loadDashboardTables();
+  } catch (err) {
+    console.error('Dashboard load error:', err);
+  }
+}
+
+function renderDashboardStats(stats) {
+  const container = $('#dashboard-stats');
+  container.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
+      <div class="stat-label">Active Cameras</div>
+      <div class="stat-value" style="color:var(--accent-green)">${stats.active_cameras || 0}</div>
+      <div class="stat-sub">${stats.camera_stats?.connected || 0} connected</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg></div>
+      <div class="stat-label">Recordings</div>
+      <div class="stat-value" style="color:var(--accent-blue)">${stats.total_recordings || 0}</div>
+      <div class="stat-sub">${stats.recordings_24h || 0} in last 24h &middot; ${formatBytes(stats.storage_used || 0)}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+      <div class="stat-label">Motion Events</div>
+      <div class="stat-value" style="color:var(--accent-yellow)">${stats.motion_events || 0}</div>
+      <div class="stat-sub">${stats.motion_events_24h || 0} in last 24h</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div class="stat-label">Human Detections</div>
+      <div class="stat-value" style="color:var(--accent-red)">${stats.humans_detected || 0}</div>
+      <div class="stat-sub">${stats.humans_detected_24h || 0} in last 24h</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+      <div class="stat-label">Alerts</div>
+      <div class="stat-value">${stats.alerts_24h || 0}</div>
+      <div class="stat-sub">${stats.unread_alerts || 0} unacknowledged</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+      <div class="stat-label">Log Entries</div>
+      <div class="stat-value">${stats.logs || 0}</div>
+      <div class="stat-sub">System history</div>
+    </div>
+  `;
+
+  // Update alert badge
+  const badge = $('#alert-badge');
+  if (stats.unread_alerts > 0) {
+    badge.textContent = stats.unread_alerts;
+    badge.style.display = '';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function loadDashboardCameras(stats) {
+  const container = $('#dashboard-cameras');
+  container.innerHTML = '';
+  const camList = window.cameraList || [];
+  if (camList.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div><h3>No Cameras Configured</h3><p>Add a camera in the Cameras section</p></div>';
+    return;
+  }
+  camList.forEach(cam => {
+    const card = document.createElement('div');
+    card.className = 'camera-card';
+    card.innerHTML = `
+      <div class="camera-preview" id="dash-preview-${cam.id}">
+        <div class="placeholder">
+          <span class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></span>
+          <span>${cam.connected ? 'Loading...' : 'Disconnected'}</span>
+        </div>
+        <div class="camera-status-bar">
+          <span class="camera-status-badge ${cam.connected ? 'connected' : 'disconnected'}">
+            ${cam.connected ? 'Live' : 'Offline'}
+          </span>
+        </div>
+      </div>
+      <div class="camera-info">
+        <span class="camera-name">${escapeHtml(cam.name)}</span>
+        <span class="camera-location">${escapeHtml(cam.location || '')}</span>
+        <span class="camera-fps">${cam.status?.frameCount || 0} frames</span>
+        <div class="camera-actions">
+          <button class="btn btn-sm btn-secondary" onclick="navigateTo('live')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View</button>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+
+    // Start live image stream
+    startLiveImage(cam.id, `dash-preview-${cam.id}`);
+  });
+}
+
+async function loadDashboardTables() {
+  try {
+    const alerts = await api('/api/alerts?limit=5');
+    const tbody = $('#dashboard-alerts-table tbody');
+    tbody.innerHTML = (alerts.length === 0)
+      ? '<tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:24px">No alerts</td></tr>'
+      : alerts.map(a => `<tr>
+          <td><span class="chip chip-${a.type === 'error' ? 'danger' : a.type === 'human' ? 'danger' : a.type === 'motion' ? 'warning' : 'info'}">${a.type}</span></td>
+          <td>${getCameraName(a.camera_id)}</td>
+          <td>${escapeHtml(a.message)}</td>
+        </tr>`).join('');
+  } catch (e) {}
+
+  try {
+    const motion = await api('/api/motion-events?limit=5');
+    const tbody2 = $('#dashboard-motion-table tbody');
+    tbody2.innerHTML = (motion.length === 0)
+      ? '<tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:24px">No motion events</td></tr>'
+      : motion.map(m => `<tr>
+          <td>${getCameraName(m.camera_id)}</td>
+          <td><span class="chip chip-warning">${m.motion_score?.toFixed(1) || '-'}</span></td>
+          <td>${timeAgo(m.timestamp)}</td>
+        </tr>`).join('');
+  } catch (e) {}
+}
+
+// ============================================================
+// LIVE VIEW
+// ============================================================
+function loadLiveView() {
+  const container = $('#live-cameras');
+  const camList = window.cameraList || [];
+  if (camList.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div><h3>No Cameras Available</h3><p>Add cameras in the Cameras section</p></div>';
+    return;
+  }
+  // Clear stale live frame watchers
+  Object.keys(liveFrameData).forEach(k => { liveFrameData[k] = []; });
+
+  container.innerHTML = '';
+  camList.forEach(cam => {
+    const div = document.createElement('div');
+    div.className = 'camera-card';
+    div.innerHTML = `
+      <div class="camera-preview" id="live-preview-${cam.id}">
+        <div class="placeholder">
+          <span class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></span>
+          <span>Connecting...</span>
+        </div>
+        <div class="camera-status-bar">
+          <span class="camera-status-badge ${cam.connected ? 'connected' : 'disconnected'}" id="live-status-${cam.id}">
+            ${cam.connected ? 'Live' : 'Offline'}
+          </span>
+        </div>
+      </div>
+      <div class="camera-info">
+        <span class="camera-name">${escapeHtml(cam.name)}</span>
+        <span class="camera-location">${escapeHtml(cam.location || '')}</span>
+        <span class="camera-fps" id="live-fps-${cam.id}"></span>
+        <div class="camera-actions">
+          <button class="btn btn-sm btn-primary" onclick="fullscreenLive(${cam.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg> Full</button>
+        </div>
+      </div>
+    `;
+    container.appendChild(div);
+
+    socket.emit('subscribe_camera', cam.id);
+    startLiveImage(cam.id, `live-preview-${cam.id}`);
+  });
+}
+
+const liveFrameData = {};
+
+function addFrameWatcher(cameraId, img, container) {
+  if (!liveFrameData[cameraId]) liveFrameData[cameraId] = [];
+  liveFrameData[cameraId].push({ img, container });
+}
+
+function startLiveImage(cameraId, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const img = document.createElement('img');
+  img.style.display = 'none';
+  img.onload = () => {
+    img.style.display = '';
+    const placeholder = container.querySelector('.placeholder');
+    if (placeholder) placeholder.style.display = 'none';
+    const statusBadge = container.querySelector('.camera-status-badge') ||
+      document.querySelector(`#live-status-${cameraId}`);
+    if (statusBadge) {
+      statusBadge.className = 'camera-status-badge connected';
+      statusBadge.textContent = 'Live';
+    }
+  };
+  img.onerror = () => {};
+  container.insertBefore(img, container.firstChild);
+
+  addFrameWatcher(cameraId, img, container);
+}
+
+function updateLiveFrame(cameraId, dataBase64) {
+  const entries = liveFrameData[cameraId];
+  if (!entries) return;
+  for (const entry of entries) {
+    entry.img.src = `data:image/jpeg;base64,${dataBase64}`;
+  }
+}
+
+function fullscreenLive(cameraId) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:200;display:flex;align-items:center;justify-content:center;cursor:pointer';
+
+  const img = document.createElement('img');
+  img.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain';
+  overlay.appendChild(img);
+  document.body.appendChild(overlay);
+
+  addFrameWatcher(cameraId, img, overlay);
+
+  overlay.onclick = () => {
+    const idx = (liveFrameData[cameraId] || []).findIndex(e => e.img === img);
+    if (idx >= 0) liveFrameData[cameraId].splice(idx, 1);
+    overlay.remove();
+  };
+}
+
+// ============================================================
+// RECORDINGS
+// ============================================================
+async function loadRecordings() {
+  try {
+    const recordings = await api('/api/recordings?limit=100');
+    const tbody = $('#recordings-table-body');
+    if (recordings.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:32px">No recordings found</td></tr>';
+      return;
+    }
+    tbody.innerHTML = recordings.map(r => `<tr>
+      <td>${getCameraName(r.camera_id)}</td>
+      <td><span class="chip chip-${r.type === 'motion' ? 'warning' : 'info'}">${r.type}</span></td>
+      <td>${formatTime(r.start_time)}</td>
+      <td>${formatDuration(r.duration)}</td>
+      <td>${formatBytes(r.size)}</td>
+      <td>
+        <button class="btn btn-sm btn-secondary" onclick="viewRecording(${r.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View</button>
+      </td>
+    </tr>`).join('');
+  } catch (err) {
+    console.error('Load recordings error:', err);
+  }
+}
+
+async function viewRecording(recId) {
+  try {
+    const data = await api(`/api/recordings/${recId}/files`);
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay open';
+    modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+    modal.innerHTML = `
+      <div class="modal" style="max-width:800px">
+        <div class="modal-header">
+          <h2>Recording: ${formatTime(data.recording.start_time)}</h2>
+           <button class="btn btn-ghost" onclick="this.closest('.modal-overlay').remove()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="modal-body" style="max-height:500px;overflow-y:auto">
+          <p style="color:var(--text-secondary);margin-bottom:12px">
+            Camera: ${getCameraName(data.recording.camera_id)} |
+            Type: ${data.recording.type} |
+            Duration: ${formatDuration(data.recording.duration)} |
+            Size: ${formatBytes(data.recording.size)}
+          </p>
+          ${data.files.length === 0
+            ? '<div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><circle cx="12" cy="15" r="2"/></svg></div><p>No frame files available</p></div>'
+            : `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px">
+                ${data.files.map(f => `<img src="/${f.path.replace(/\\/g,'/')}" style="width:100%;border-radius:4px;cursor:pointer" onclick="openImagePreview(this.src)">`).join('')}
+              </div>`
+          }
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  } catch (err) {
+    console.error('View recording error:', err);
+  }
+}
+
+// ============================================================
+// MOTION EVENTS
+// ============================================================
+async function loadMotionEvents() {
+  try {
+    const events = await api('/api/motion-events?limit=100');
+    const tbody = $('#motion-table-body');
+    if (events.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:32px">No motion events recorded</td></tr>';
+      return;
+    }
+    tbody.innerHTML = events.map(e => `<tr>
+      <td>${getCameraName(e.camera_id)}</td>
+      <td>${formatTime(e.timestamp)}</td>
+      <td><span class="chip chip-${e.motion_score > 10 ? 'danger' : e.motion_score > 5 ? 'warning' : 'info'}">${e.motion_score?.toFixed(1)}</span></td>
+      <td>${e.snapshot ? `<img src="/${e.snapshot.replace(/\\/g,'/')}" style="width:80px;height:60px;object-fit:cover;border-radius:4px;cursor:pointer" onclick="openImagePreview(this.src)">` : '-'}</td>
+    </tr>`).join('');
+  } catch (err) {
+    console.error('Load motion events error:', err);
+  }
+}
+
+// ============================================================
+// HUMAN DETECTIONS
+// ============================================================
+async function loadHumanDetections() {
+  try {
+    const detections = await api('/api/human-detections?limit=100');
+    const tbody = $('#human-table-body');
+    if (detections.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:32px">No human detections recorded</td></tr>';
+      return;
+    }
+    tbody.innerHTML = detections.map(d => `<tr>
+      <td>${getCameraName(d.camera_id)}</td>
+      <td>${formatTime(d.timestamp)}</td>
+      <td><span class="chip chip-danger">${(d.confidence * 100).toFixed(0)}%</span></td>
+      <td>${d.snapshot ? `<img src="/${d.snapshot.replace(/\\/g,'/')}" style="width:80px;height:60px;object-fit:cover;border-radius:4px;cursor:pointer" onclick="openImagePreview(this.src)">` : '-'}</td>
+    </tr>`).join('');
+  } catch (err) {
+    console.error('Load human detections error:', err);
+  }
+}
+
+// ============================================================
+// ALERTS
+// ============================================================
+async function loadAlerts() {
+  try {
+    const filter = $('#alert-filter').value;
+    const params = new URLSearchParams({ limit: 100 });
+    if (filter === 'unacknowledged') params.set('acknowledged', 'false');
+    else if (filter === 'acknowledged') params.set('acknowledged', 'true');
+    const alerts = await api(`/api/alerts?${params}`);
+    const tbody = $('#alerts-table-body');
+    if (alerts.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:32px">No alerts</td></tr>';
+      return;
+    }
+    tbody.innerHTML = alerts.map(a => `<tr>
+      <td><span class="chip chip-${a.type === 'error' ? 'danger' : a.type === 'human' ? 'danger' : a.type === 'motion' ? 'warning' : 'info'}">${a.type}</span></td>
+      <td>${a.camera_id ? getCameraName(a.camera_id) : 'System'}</td>
+      <td>${escapeHtml(a.message)}</td>
+      <td>${formatTime(a.timestamp)}</td>
+      <td>${a.acknowledged ? '<span class="chip chip-success">Done</span>' : '<span class="chip chip-warning">New</span>'}</td>
+      <td>${!a.acknowledged ? `<button class="btn btn-sm btn-success" onclick="acknowledgeAlert(${a.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button>` : ''}</td>
+    </tr>`).join('');
+  } catch (err) {
+    console.error('Load alerts error:', err);
+  }
+}
+
+async function acknowledgeAlert(id) {
+  try {
+    await api(`/api/alerts/${id}/acknowledge`, { method: 'POST' });
+    loadAlerts();
+  } catch (err) {
+    console.error('Acknowledge error:', err);
+  }
+}
+
+async function acknowledgeAllAlerts() {
+  try {
+    await api('/api/alerts/acknowledge-all', { method: 'POST' });
+    loadAlerts();
+    $('#alert-badge').style.display = 'none';
+  } catch (err) {
+    console.error('Acknowledge all error:', err);
+  }
+}
+
+// ============================================================
+// LOGS
+// ============================================================
+async function loadLogs() {
+  try {
+    const level = $('#log-level-filter').value;
+    const params = new URLSearchParams({ limit: 200 });
+    if (level) params.set('level', level);
+    const logs = await api(`/api/logs?${params}`);
+    const container = $('#log-entries');
+    if (logs.length === 0) {
+      container.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:32px">No log entries</div>';
+      return;
+    }
+    container.innerHTML = logs.map(l =>
+      `<div class="log-entry">
+        <span class="log-time">${formatTimeShort(l.timestamp)}</span>
+        <span class="log-level ${l.level}">${l.level}</span>
+        <span class="log-source">${escapeHtml(l.source || '')}</span>
+        <span class="log-message">${escapeHtml(l.message)}</span>
+      </div>`
+    ).join('');
+  } catch (err) {
+    console.error('Load logs error:', err);
+  }
+}
+
+async function clearLogs() {
+  if (!confirm('Clear all logs?')) return;
+  try {
+    await api('/api/logs', { method: 'DELETE' });
+    loadLogs();
+  } catch (err) {
+    console.error('Clear logs error:', err);
+  }
+}
+
+// ============================================================
+// CAMERAS
+// ============================================================
+async function loadCamerasPage() {
+  try {
+    const cams = await api('/api/cameras');
+    window.cameraList = cams;
+    const tbody = $('#cameras-table-body');
+    if (cams.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:32px">No cameras configured</td></tr>';
+      return;
+    }
+    tbody.innerHTML = cams.map(c => `<tr>
+      <td>${c.id}</td>
+      <td><strong>${escapeHtml(c.name)}</strong></td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">${escapeHtml(c.stream_url)}</td>
+      <td>${escapeHtml(c.location || '-')}</td>
+      <td>
+        <span class="chip chip-${c.connected ? 'success' : 'danger'}">${c.connected ? 'Connected' : 'Disconnected'}</span>
+      </td>
+      <td>${c.status?.frameCount || 0}</td>
+      <td>
+        <button class="btn btn-sm btn-secondary" onclick="testCamera(${c.id})">Test</button>
+        <button class="btn btn-sm btn-secondary" onclick="showCameraSettings(${c.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+        <button class="btn btn-sm ${c.enabled ? 'btn-danger' : 'btn-success'}" onclick="toggleCamera(${c.id})">
+          ${c.enabled ? 'Stop' : 'Start'}
+        </button>
+        <button class="btn btn-sm btn-danger" onclick="deleteCamera(${c.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+      </td>
+    </tr>`).join('');
+
+    // Update filter dropdowns
+    const filters = ['recording-camera-filter', 'motion-camera-filter', 'human-camera-filter'];
+    filters.forEach(fid => {
+      const sel = document.getElementById(fid);
+      if (!sel) return;
+      const currentVal = sel.value;
+      sel.innerHTML = '<option value="">All Cameras</option>' +
+        cams.map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
+      sel.value = currentVal;
+    });
+  } catch (err) {
+    console.error('Load cameras error:', err);
+  }
+}
+
+// ============================================================
+// CAMERA SETTINGS
+// ============================================================
+let currentSettingsCamId = null;
+
+async function showCameraSettings(id) {
+  currentSettingsCamId = id;
+  const cam = window.cameraList?.find(c => c.id === id);
+  if (!cam) return;
+  $('#settings-cam-name').textContent = cam.name;
+  $('#settings-loading').style.display = '';
+  $('#settings-content').style.display = 'none';
+  $('#settings-result').style.display = 'none';
+  $('#settings-modal').classList.add('open');
+
+  try {
+    const s = await api(`/api/cameras/${id}/settings`);
+    $('#settings-loading').style.display = 'none';
+    $('#settings-content').style.display = '';
+
+    $('#set-quality').value = s.quality || 12;
+    $('#set-quality-label').textContent = s.quality || 12;
+
+    if (s.resolution) {
+      const sel = $('#set-resolution');
+      for (let opt of sel.options) {
+        if (opt.value === s.resolution) { sel.value = s.resolution; break; }
+      }
+    }
+
+    $('#set-hmirror').checked = s.hmirror === true || s.hmirror === 1;
+    $('#set-vflip').checked = s.vflip === true || s.vflip === 1;
+    $('#set-flash').checked = s.flash_on === true || s.flash_enabled === true;
+    onFlashToggle();
+
+    $('#set-brightness').value = s.brightness || 0;
+    $('#set-brightness-label').textContent = s.brightness || 0;
+    $('#set-contrast').value = s.contrast || 0;
+    $('#set-contrast-label').textContent = s.contrast || 0;
+  } catch (err) {
+    $('#settings-loading').innerHTML =
+      `<div style="text-align:center;padding:20px;color:var(--accent-red)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        <p style="margin-top:8px">Could not load settings: ${err.message}</p>
+        <p style="font-size:12px;color:var(--text-muted);margin-top:4px">Make sure the ESP32-CAM is online and the config_url is correct</p>
+       </div>`;
+  }
+}
+
+function onFlashToggle() {
+  const checked = $('#set-flash').checked;
+  $('#flash-warning').style.display = checked ? '' : 'none';
+}
+
+document.addEventListener('change', (e) => {
+  if (e.target.id === 'set-flash') onFlashToggle();
+});
+
+async function applyCameraSettings() {
+  if (!currentSettingsCamId) return;
+  const btn = $('#settings-apply-btn');
+  btn.disabled = true;
+  btn.textContent = 'Applying...';
+
+  const settings = {
+    quality: parseInt($('#set-quality').value),
+    resolution: $('#set-resolution').value,
+    hmirror: $('#set-hmirror').checked,
+    vflip: $('#set-vflip').checked,
+    flash_enabled: $('#set-flash').checked,
+    brightness: parseInt($('#set-brightness').value),
+    contrast: parseInt($('#set-contrast').value)
+  };
+
+  const resultDiv = $('#settings-result');
+  resultDiv.style.display = '';
+
+  try {
+    const result = await api(`/api/cameras/${currentSettingsCamId}/settings`, {
+      method: 'PUT',
+      body: JSON.stringify(settings)
+    });
+
+    if (result.success) {
+      const failed = result.results.filter(r => r.success === false);
+      if (failed.length === 0) {
+        resultDiv.className = 'chip chip-success';
+        resultDiv.innerHTML = 'All settings applied successfully';
+        resultDiv.style.background = 'rgba(16,185,129,0.15)';
+        resultDiv.style.color = 'var(--accent-green)';
+        setTimeout(() => closeModal('settings-modal'), 1500);
+      } else {
+        resultDiv.className = 'chip chip-warning';
+        resultDiv.innerHTML = `Applied ${result.results.length - failed.length}/${result.results.length} settings. Failed: ${failed.map(f => f.setting).join(', ')}`;
+        resultDiv.style.background = 'rgba(245,158,11,0.15)';
+        resultDiv.style.color = 'var(--accent-yellow)';
+      }
+    } else {
+      resultDiv.className = 'chip chip-danger';
+      resultDiv.innerHTML = 'Failed to apply settings. ESP32-CAM may be offline.';
+      resultDiv.style.background = 'rgba(239,68,68,0.15)';
+      resultDiv.style.color = 'var(--accent-red)';
+    }
+  } catch (err) {
+    resultDiv.className = 'chip chip-danger';
+    resultDiv.innerHTML = `Error: ${err.message}`;
+    resultDiv.style.background = 'rgba(239,68,68,0.15)';
+    resultDiv.style.color = 'var(--accent-red)';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Apply Settings';
+}
+
+async function testCamera(id) {
+  try {
+    const result = await api(`/api/cameras/${id}/test`, { method: 'POST' });
+    alert(result.success ? 'Connection OK' : `Connection failed: ${result.error}`);
+  } catch (err) {
+    alert(`Error: ${err.message}`);
+  }
+}
+
+async function toggleCamera(id) {
+  try {
+    const cam = window.cameraList?.find(c => c.id === id);
+    if (cam && cam.enabled) {
+      await api(`/api/cameras/${id}/stream/stop`, { method: 'POST' });
+    } else {
+      await api(`/api/cameras/${id}/stream/start`, { method: 'POST' });
+    }
+    loadCamerasPage();
+  } catch (err) {
+    console.error('Toggle camera error:', err);
+  }
+}
+
+async function deleteCamera(id) {
+  if (!confirm('Delete this camera?')) return;
+  try {
+    await api(`/api/cameras/${id}`, { method: 'DELETE' });
+    loadCamerasPage();
+  } catch (err) {
+    console.error('Delete camera error:', err);
+  }
+}
+
+function showAddCameraModal() {
+  $('#add-camera-modal').classList.add('open');
+}
+
+function closeModal(id) {
+  $('#' + id).classList.remove('open');
+}
+
+async function addCamera() {
+  const name = $('#cam-name').value.trim();
+  const stream_url = $('#cam-stream-url').value.trim();
+  const snapshot_url = $('#cam-snapshot-url').value.trim();
+  const location = $('#cam-location').value.trim();
+
+  if (!name || !stream_url) {
+    alert('Name and Stream URL are required');
+    return;
+  }
+
+  try {
+    await api('/api/cameras', {
+      method: 'POST',
+      body: JSON.stringify({ name, stream_url, snapshot_url: snapshot_url || undefined, location })
+    });
+    closeModal('add-camera-modal');
+    $('#cam-name').value = '';
+    $('#cam-stream-url').value = '';
+    $('#cam-snapshot-url').value = '';
+    $('#cam-location').value = '';
+    loadCamerasPage();
+  } catch (err) {
+    alert(`Error: ${err.message}`);
+  }
+}
+
+// ============================================================
+// SETTINGS
+// ============================================================
+async function toggleMotion() {
+  const enabled = $('#motion-enabled').checked;
+  try {
+    await api(enabled ? '/api/motion/enable' : '/api/motion/disable', { method: 'POST' });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function updateMotionSettings() {
+  const sensitivity = parseInt($('#motion-sensitivity').value);
+  const threshold = parseFloat($('#motion-threshold').value);
+  $('#sensitivity-value').textContent = sensitivity;
+  $('#threshold-value').textContent = threshold;
+  try {
+    await api('/api/motion/settings', {
+      method: 'PUT',
+      body: JSON.stringify({ sensitivity, threshold })
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function toggleHumanDetection() {
+  const enabled = $('#human-enabled').checked;
+  try {
+    await api(enabled ? '/api/human-detection/enable' : '/api/human-detection/disable', { method: 'POST' });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function updateHumanSettings() {
+  const confidence = parseFloat($('#human-confidence').value);
+  $('#confidence-value').textContent = confidence.toFixed(2);
+  try {
+    await api('/api/human-detection/settings', {
+      method: 'PUT',
+      body: JSON.stringify({ confidence_threshold: confidence })
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+function toggleRecording() {
+  // Display only, actual toggle would need API endpoint
+  const enabled = $('#recording-enabled').checked;
+  console.log('Recording:', enabled ? 'enabled' : 'disabled');
+}
+
+function toggleAlerts() {
+  const enabled = $('#alerts-enabled').checked;
+  console.log('Alerts:', enabled ? 'enabled' : 'disabled');
+}
+
+// ============================================================
+// IMAGE PREVIEW
+// ============================================================
+function openImagePreview(src) {
+  $('#preview-image').src = src;
+  $('#image-preview').classList.add('open');
+}
+
+function closeImagePreview() {
+  $('#image-preview').classList.remove('open');
+}
+
+// ============================================================
+// SOCKET.IO EVENTS
+// ============================================================
+socket.on('connect', () => {
+  $('#status-dot').className = 'dot';
+  $('#status-text').textContent = 'Connected';
+});
+
+socket.on('disconnect', () => {
+  $('#status-dot').className = 'dot error';
+  $('#status-text').textContent = 'Disconnected';
+});
+
+socket.on('stats_update', (stats) => {
+  if ($('#page-dashboard').classList.contains('active')) {
+    renderDashboardStats(stats);
+  }
+  // Update alert badge
+  if (stats.unread_alerts > 0) {
+    $('#alert-badge').textContent = stats.unread_alerts;
+    $('#alert-badge').style.display = '';
+  } else {
+    $('#alert-badge').style.display = 'none';
+  }
+});
+
+socket.on('new_alert', (alert) => {
+  // Update badge
+  const badge = $('#alert-badge');
+  const current = parseInt(badge.textContent) || 0;
+  badge.textContent = current + 1;
+  badge.style.display = '';
+
+  // Show toast
+  showAlertToast(alert);
+
+  // Play notification sound
+  if (alert.sound !== false) {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = alert.type === 'human' ? 800 : 600;
+      gain.gain.value = 0.1;
+      osc.start();
+      setTimeout(() => { osc.stop(); ctx.close(); }, 200);
+    } catch (e) {}
+  }
+
+  // Browser notification
+  if (alert.notification !== false && 'Notification' in window && Notification.permission === 'granted') {
+    new Notification(`Watchtower: ${alert.type}`, {
+      body: alert.message,
+      icon: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233b82f6"%3E%3Cpath d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/%3E%3C/svg%3E'
+    });
+  }
+});
+
+socket.on('motion_event', (data) => {
+  // Update motion page if visible
+  if ($('#page-motion').classList.contains('active')) {
+    loadMotionEvents();
+  }
+});
+
+socket.on('human_detection', (data) => {
+  // Update human badge
+  const badge = $('#human-badge');
+  const current = parseInt(badge.textContent) || 0;
+  badge.textContent = current + 1;
+  badge.style.display = '';
+
+  if ($('#page-humans').classList.contains('active')) {
+    loadHumanDetections();
+  }
+});
+
+socket.on('frame', (data) => {
+  if (data && data.data) {
+    updateLiveFrame(data.cameraId, data.data);
+  }
+});
+
+socket.on('camera_status', (data) => {
+  loadCamerasPage();
+  loadLiveView();
+});
+
+function showAlertToast(alert) {
+  const container = $('#alert-toast');
+  const item = document.createElement('div');
+  item.className = `alert-toast-item alert-${alert.type}`;
+  const icons = {
+    motion: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
+    human: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+    error: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+    info: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+  };
+  item.innerHTML = `
+    <span class="alert-icon">${icons[alert.type] || icons.info}</span>
+    <div class="alert-body">
+      <div class="alert-title">${alert.type.toUpperCase()}</div>
+      <div class="alert-message">${escapeHtml(alert.message)}</div>
+      <div class="alert-time">${new Date().toLocaleTimeString()}</div>
+    </div>
+  `;
+  item.onclick = () => item.remove();
+  container.appendChild(item);
+  setTimeout(() => { if (item.parentNode) item.remove(); }, 8000);
+}
+
+// Request notification permission
+if ('Notification' in window && Notification.permission === 'default') {
+  Notification.requestPermission();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+async function init() {
+  try {
+    const cams = await api('/api/cameras');
+    window.cameraList = cams;
+    loadDashboard();
+  } catch (err) {
+    console.error('Initialization error:', err);
+  }
+
+  // Load camera filter dropdowns
+  loadCamerasPage();
+
+  // Auto-refresh some pages
+  setInterval(() => {
+    if ($('#page-logs').classList.contains('active')) loadLogs();
+  }, 3000);
+}
+
+// Load settings values
+fetch('/api/config').then(r => r.json()).then(cfg => {
+  if (cfg.motion_detection) {
+    $('#motion-sensitivity').value = cfg.motion_detection.sensitivity || 25;
+    $('#motion-threshold').value = cfg.motion_detection.threshold || 5;
+    $('#sensitivity-value').textContent = cfg.motion_detection.sensitivity || 25;
+    $('#threshold-value').textContent = cfg.motion_detection.threshold || 5;
+    $('#motion-enabled').checked = cfg.motion_detection.enabled !== false;
+  }
+  if (cfg.human_detection) {
+    $('#human-confidence').value = cfg.human_detection.confidence_threshold || 0.5;
+    $('#confidence-value').textContent = (cfg.human_detection.confidence_threshold || 0.5).toFixed(2);
+    $('#human-enabled').checked = cfg.human_detection.enabled !== false;
+  }
+  if (cfg.recording) {
+    $('#recording-enabled').checked = cfg.recording.enabled !== false;
+    $('#retention-days').value = cfg.recording.retention_days || 14;
+  }
+  if (cfg.alerts) {
+    $('#alerts-enabled').checked = cfg.alerts.enabled !== false;
+    $('#motion-alert').checked = cfg.alerts.motion_alert !== false;
+    $('#human-alert').checked = cfg.alerts.human_alert !== false;
+  }
+}).catch(() => {});
+
+init();
+</script>
+</body>
+</html>

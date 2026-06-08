@@ -1,0 +1,69 @@
+{
+  "server": {
+    "port": 3000,
+    "host": "0.0.0.0"
+  },
+  "cameras": [
+
+    /* EDIT THIS */
+    {
+      "id": 1,
+      "name": "Front Door",
+      "stream_url": "http://192.168.X.XXX:81/stream",
+      "snapshot_url": "http://192.168.X.XXX:81/capture",
+      "config_url": "http://192.168.X.XXX:81",
+      "location": "Front Entrance",
+      "enabled": true,
+      "fps": 5,
+      "settings": {
+        "resolution": "sxga",
+        "quality": 12,
+        "hmirror": false,
+        "vflip": true,
+        "flash_enabled": false,
+        "brightness": 0,
+        "contrast": 0
+      }
+    }
+  ],
+  "motion_detection": {
+    "enabled": true,
+    "threshold": 5,
+    "sensitivity": 25,
+    "cooldown_ms": 2000,
+    "frame_interval_ms": 500
+  },
+  "human_detection": {
+    "enabled": true,
+    "confidence_threshold": 0.5,
+    "interval_ms": 2000,
+    "model": "coco-ssd"
+  },
+  "recording": {
+    "enabled": true,
+    "continuous": true,
+    "motion_only": false,
+    "retention_days": 14,
+    "segment_duration_sec": 300,
+    "format": "jpeg",
+    "motion_fps": 5,
+    "continuous_fps": 1
+  },
+  "alerts": {
+    "enabled": true,
+    "motion_alert": true,
+    "human_alert": true,
+    "sound_enabled": true,
+    "browser_notifications": true
+  },
+  "storage": {
+    "recordings_path": "./recordings",
+    "snapshots_path": "./snapshots",
+    "max_snapshots_per_event": 5
+  },
+  "auth": {
+    "enabled": false,
+    "username": "admin",
+    "password": "admin"
+  }
+}
