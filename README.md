@@ -1,6 +1,6 @@
 # Watchtower
 
-A self-hosted CCTV system (by **Enginestein**) using an ESP32-CAM for video capture and a Node.js server for motion detection, human recognition, recording, and live monitoring via a dark-mode web dashboard.
+A self-hosted CCTV system using an ESP32-CAM for video capture and a Node.js server for motion detection, human recognition, recording, and live monitoring via a dark-mode web dashboard.
 
 ## Architecture
 
