@@ -13,7 +13,7 @@
     "@tensorflow/tfjs-node": "^4.22.0",
     "better-sqlite3": "^11.7.0",
     "chokidar": "^4.0.3",
-    "express": "^4.21.1",
+    "express": "^5.2.1",
     "sharp": "^0.33.5",
     "socket.io": "^4.8.1"
   }
